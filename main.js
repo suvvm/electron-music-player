@@ -9,7 +9,8 @@ app.on('ready', () => {
         }
     })
 
-    mainWindow.loadFile('index.html')
+    mainWindow.loadFile('./renderer/index.html')
+    // mainWindow.loadFile('index.html')
     // const secondWindow = new BrowserWindow({
     //     width: 400,
     //     height: 300,
@@ -19,10 +20,10 @@ app.on('ready', () => {
     //     parent: mainWindow
     // })
     // secondWindow.loadFile('second.html')
-    ipcMain.on('message', (event, arg) => {
-        console.log(arg)
-        // event.sender.send('reply', 'hello from main')
-        mainWindow.send('reply', 'hello from main')
-    })
+    // ipcMain.on('message', (event, arg) => {
+    //     console.log(arg)
+    //     // event.sender.send('reply', 'hello from main')
+    //     mainWindow.send('reply', 'hello from main')
+    // })
 })
 
