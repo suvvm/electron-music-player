@@ -18,7 +18,6 @@ class AppWindow extends BrowserWindow {
         this.once('ready-to-show', () => {
             this.show()
         })
-
     }
 }
 app.on('ready', () => {
@@ -30,12 +29,20 @@ app.on('ready', () => {
             parent: mainWindow
         }, './renderer/add.html')
     })
+    // 加载完成后自动渲染音乐
+    mainWindow.webContents.on('did-finish-load', () => {
+        console.log('page did finish load')
+        mainWindow.send('getTracks', myStore.getTracks())
+    })
+
+    // 导入音乐
     ipcMain.on('add-tracks', (event, tracks) => {
         console.log('tracks')
         console.log(tracks)
         const updatedTracks = myStore.addTracks(tracks).getTracks()
         console.log('updatedTracks')
         console.log(updatedTracks)
+        mainWindow.send('getTracks', updatedTracks)
     })
     ipcMain.on('open-music-file', (event) => {
         dialog.showOpenDialog({
