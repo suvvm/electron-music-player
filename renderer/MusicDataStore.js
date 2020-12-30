@@ -7,7 +7,7 @@ class DataStore extends Store {
         this.tracks = this.get('tracks') || []
     }
     saveTracks() {
-        this.saveTracks('tracks', this.tracks)
+        this.set('tracks', this.tracks)
         return this
     }
     getTracks() {
