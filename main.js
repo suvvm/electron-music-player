@@ -39,7 +39,6 @@ app.on('ready', () =>{
     const updatedTracks = myStore.deleteTrack(id).getTracks()
     mainWindow.send('getTracks', updatedTracks)
   })
-
   ipcMain.on('open-music-file',(event)=>{
     dialog.showOpenDialog({
       properties: ['openFile','multiSelections'],//允许选择文件，允许多选
@@ -47,6 +46,28 @@ app.on('ready', () =>{
     }).then(result => {
       if (result.filePaths){
         event.sender.send('selected-file',result.filePaths)
+      }
+    })
+  })
+  ipcMain.on('get-poster', (event, id) => {
+    dialog.showOpenDialog({
+      properties: ['openFile'], // 选择文件
+      filters: [{ name: 'Poster', extensions:['jpg', 'jpeg', 'png', 'gif'] }]//确定范围类型
+    }).then(result => {
+      if (result.filePaths){
+        const updatedTracks = myStore.mdfPoster(id, result.filePaths[0]).getTracks()
+        mainWindow.send('getTracks', updatedTracks)
+      }
+    })
+  })
+  ipcMain.on('get-lyrics', (event, id) => {
+    dialog.showOpenDialog({
+      properties: ['openFile'], // 选择文件
+      filters: [{ name: 'Lyrics', extensions:['lrc']}] //确定范围类型
+    }).then(result => {
+      if (result.filePaths){
+        const updatedTracks = myStore.mdfLyrics(id, result.filePaths[0]).getTracks()
+        mainWindow.send('getTracks', updatedTracks)
       }
     })
   })

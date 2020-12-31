@@ -12,13 +12,15 @@ const renderListHTML = (tracks) =>{
     const tracksList = $('tracksList')
     const tracksListHTML = tracks.reduce((html,track) =>{
       html += `<li class = "row music-track list-group-item d-flex justify-content-between align-items-center" >
-        <div class="col-10">
+        <div class="col-9">
           <i class="fas fa-music mr-2 text-secondary"></i>
           <b>${track.fileName}</b>
         </div>
-        <div class="col-2">
+        <div class="col-3">
           <i class="fas fa-play mr-3 " id="${track.id}_play" data-id="${track.id}"></i>
-          <i class="fas fa-trash-alt " id="${track.id}_del" data-id="${track.id}"></i>
+          <i class="fas fa-trash-alt mr-3 " id="${track.id}_del" data-id="${track.id}"></i>
+          <i class="fas fa-images mr-3 " id="${track.id}_img" data-id="${track.id}"></i>
+          <i class="fas fa-file-word mr-3 " id="${track.id}_word" data-id="${track.id}"></i>
         </div>
       </li>`
       return html
@@ -49,7 +51,13 @@ ipcRenderer.on('getTracks', (event,tracks) => {
     console.log('receive tracks' , tracks)
     allTracks = tracks
     renderListHTML(tracks)
+    if (currentTrack) {
+        var musicPlaying = $(`${currentTrack.id}_play`)
+        var classVal = musicPlaying.getAttribute('class').replace('fa-play', 'fa-pause')
+        musicPlaying.setAttribute('class', classVal)
+    }
 })
+
 musicAudio.addEventListener('loadedmetadata', () =>{//渲染播放器状态
     renderPlayerHTML(currentTrack.fileName, musicAudio.duration)
 })
@@ -105,11 +113,15 @@ $('tracksList').addEventListener('click',(event) =>{
             }
         }
         classList.replace('fa-play' , 'fa-pause')
-    }else if (id && classList.contains('fa-pause')) {//暂停播放
+    } else if (id && classList.contains('fa-pause')) { // 暂停播放
         musicAudio.pause()
         classList.replace('fa-pause','fa-play')
-    }else if (id && classList.contains('fa-trash-alt')){//发送事件 删除这条音乐
+    } else if (id && classList.contains('fa-trash-alt')){ // 发送事件 删除这条音乐
         ipcRenderer.send('delete-track' , id)
+    } else if (id && classList.contains('fa-images')) { // 添加封面
+        ipcRenderer.send('get-poster', id)
+    } else {
+        ipcRenderer.send('get-lyrics', id)
     }
 })
 
