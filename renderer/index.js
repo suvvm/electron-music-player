@@ -120,7 +120,7 @@ $('tracksList').addEventListener('click',(event) =>{
         ipcRenderer.send('delete-track' , id)
     } else if (id && classList.contains('fa-images')) { // 添加封面
         ipcRenderer.send('get-poster', id)
-    } else {
+    } else if (id && classList.contains('fa-file-word')) {
         ipcRenderer.send('get-lyrics', id)
     }
 })
