@@ -8,6 +8,29 @@ $('add-music-button').addEventListener('click',()=>{
     ipcRenderer.send('add-music-window')
 })
 
+jQuery(document).ready(function ($) {
+    var music = false
+    $('#tabs').tab();
+    $('#player-status').click(function(){
+        // console.log('player-status click')
+        if (!music) {
+            music = true
+            $(`#tabs a[href='#music']`).tab('show')
+            if (currentTrack.posterPath) {
+                $('#music_poster_img').attr('src',currentTrack.posterPath)
+                $('#bg_img').attr('src',currentTrack.posterPath)
+            }
+        } else {
+            music = false
+            $(`#tabs a[href='#home']`).tab('show')
+        }
+    });
+    $('#back').click(function (){
+        $(`#tabs a[href='#home']`).tab('show')
+    })
+});
+
+
 const renderListHTML = (tracks) =>{
     const tracksList = $('tracksList')
     const tracksListHTML = tracks.reduce((html,track) =>{
@@ -165,7 +188,6 @@ $('poster_div').addEventListener('click', (event) => {
         }
         musicAudio.pause()
         console.log(currentTrack.id)
-
     }
 })
 
