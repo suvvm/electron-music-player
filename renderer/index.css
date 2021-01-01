@@ -1,3 +1,89 @@
 #tracksList .col-2 .fas:hover{
     cursor: pointer;
 }
+
+#poster_div {
+    margin-top: 20px;
+    width: 300px;
+    height: 300px;
+    background: url('../resources/disc.png');
+    background-size:100% 100%;
+}
+
+#poster_needle {
+    position: absolute;
+    z-index: 1;
+    width: 100px;
+    /*transform-origin: 0px 0px;*/
+    /*transform: rotate(-60deg);*/
+    transform-origin: left top;
+}
+
+#music_poster_img {
+    position: absolute;
+    width: 190px;
+    height: 190px;
+    margin-left: 55px;
+    margin-top: 55px;
+    z-index: 0;
+}
+
+.animation_needle_play {
+    transform: rotate(-40deg);
+    transform-origin: left top;
+    animation:needle_play 4s linear;
+}
+
+.animation_needle_pause {
+    transform: rotate(-60deg);
+    transform-origin: left top;
+    animation:needle_pause 4s linear;
+}
+
+.animation_play {
+    width: 190px;
+    height: 190px;
+    /*border:1px solid white;*/
+    border-radius: 100px;
+    /*overflow: hidden;*/
+    /*float: left;*/
+    animation:rotating 6s  linear infinite;
+}
+
+.animation_pause {
+    width: 190px;
+    height: 190px;
+    /*border:1px solid white;*/
+    border-radius: 100px;
+    /*overflow: hidden;*/
+     /*float: left;*/
+    animation:rotating 6s  linear paused;
+}
+
+@keyframes rotating {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes needle_play {
+    from {
+        transform: rotate(-60deg);
+    }
+    to {
+        transform: rotate(-40deg);
+    }
+}
+
+@keyframes needle_pause {
+    from {
+        transform: rotate(-40deg);
+    }
+    to {
+        transform: rotate(-60deg);
+    }
+}
+

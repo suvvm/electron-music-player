@@ -137,7 +137,36 @@ $('music_bar').addEventListener('click', (event) => {
 
     musicAudio.currentTime = ((now_w/ bar_w) * musicAudio.duration)
 })
+$('poster_div').addEventListener('click', (event) => {
+    var playBtn = $(`${currentTrack.id}_play`)
+    var btnClassVal = playBtn.getAttribute('class')
+    if (musicAudio.paused) {
+        $('music_poster_img').setAttribute('class', 'animation_play')
+        $('poster_needle').setAttribute('class', 'animation_needle_play')
 
+        // btnClassVal.replace('fa-play', 'fa-pause')
+        // console.log('fa-play to fa-pause')
+        // playBtn.setAttribute('class', btnClassVal)
 
+        if (currentTrack) {
+            var musicPlaying = $(`${currentTrack.id}_play`)
+            var classVal = musicPlaying.getAttribute('class').replace('fa-play', 'fa-pause')
+            musicPlaying.setAttribute('class', classVal)
+        }
+        musicAudio.play()
+        console.log(currentTrack.id)
+
+    } else {
+        $('music_poster_img').setAttribute('class', 'animation_pause')
+        $('poster_needle').setAttribute('class', 'animation_needle_pause')
+        const resetIconEle = document.querySelector('.fa-pause')
+        if(resetIconEle){
+            resetIconEle.classList.replace('fa-pause' , 'fa-play')
+        }
+        musicAudio.pause()
+        console.log(currentTrack.id)
+
+    }
+})
 
 // var width = $('player-progress').offsetHeight
