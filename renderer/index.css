@@ -11,9 +11,10 @@
 }
 
 #bg_img {
-    width: 800px;
-    height: 600px;
+    width: 1000px;
+    height: 800px;
     margin-top: -50px;
+    margin-left: -100px;
     position: absolute;
     z-index: 0;
     /*-webkit-filter: blur(5px); !* Chrome, Safari, Opera *!*/
@@ -22,7 +23,7 @@
 
 #poster_needle {
     position: absolute;
-    z-index: 2;
+    z-index: 90;
     width: 100px;
     /*transform-origin: 0px 0px;*/
     /*transform: rotate(-60deg);*/
@@ -35,7 +36,7 @@
     height: 190px;
     margin-left: 55px;
     margin-top: 55px;
-    z-index: 1;
+    z-index: 80;
 }
 
 .animation_needle_play {
@@ -70,6 +71,14 @@
     animation:rotating 6s  linear paused;
 }
 
+#lyrics_box {
+    margin-top: 20px;
+    width: 300px;
+    height: 500px;
+    background: #8c89ff;
+}
+
+
 @keyframes rotating {
     from {
         transform: rotate(0deg);
@@ -95,5 +104,81 @@
     to {
         transform: rotate(-60deg);
     }
+}
+
+#playlist {
+    text-align: left;
+    max-width: 250px;
+    height: 500px;
+    padding: 5px;
+    position: absolute;
+    left: 0;
+    z-index: 999;
+    background-color: rgba(50, 50, 50, 0.5);
+}
+
+#playlist ol {
+    height: 480px;
+    overflow: auto;
+    margin: 0;
+}
+#lyricWrapper {
+    height: 315px;
+    overflow: hidden;
+    position: relative;
+    margin-top: 20px;
+    color: #fff;
+}
+
+/* http://stackoverflow.com/questions/13426875/text-border-using-css-border-around-text */
+#lyricContainer {
+    position: relative;
+    top: 130px;
+    text-shadow: 1px 0 0 #000, -1px 0 0 #000, 0 1px 0 #000, 0 -1px 0 #000;
+}
+
+/*the highlight color of the current lyric line*/
+.current-line-0 {
+    color: #FAFA17;
+}
+.current-line-1 {
+    color: #ff1493;
+}
+.current-line-2 {
+    color: #adff2f;
+}
+.current-line-3 {
+    color: #c617e8;
+}
+.current-song, .current-song a {
+    color: #A6E22D;
+}
+/*hide the default audio controls when overflow, the 526px is the width of the controls in IE*/
+@media screen and (max-width: 526px) {
+    #player {
+        display: none;
+    }
+}
+
+/*custom scrollbar for webkit browsers*/
+#playlist ol::-webkit-scrollbar-track
+{
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    border-radius: 15px;
+    background-color: #F5F5F5;
+}
+
+#playlist ol::-webkit-scrollbar
+{
+    width: 5px;
+    border-radius: 15px;
+    background-color: #F5F5F5;
+}
+
+#playlist ol::-webkit-scrollbar-thumb
+{
+    border-radius: 15px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+    background-color: #BCBCBC;
 }
 
