@@ -7,9 +7,6 @@ let allTracks
 let currentTrack
 let musicId = 0
 let lyricVal
-let lrcHighIndex = 0
-let lrcMoveIndex = 0
-let movDis = 0
 let lyricStyle = 0
 $('add-music-button').addEventListener('click',()=>{
     ipcRenderer.send('add-music-window')
@@ -161,10 +158,10 @@ $('tracksList').addEventListener('click',(event) =>{
             musicAudio.play()
         }else {//播放新的歌曲，还原之前的图标
             currentTrack = allTracks.find(track => track.id === id )
-            if (currentTrack.lyricsPath) {
-                parseLyric(currentTrack.lyricsPath)
-                lyricStyle = Math.floor(Math.random() * 4)
-            }
+
+            parseLyric(currentTrack.lyricsPath)
+            lyricStyle = Math.floor(Math.random() * 4)
+
             console.log(currentTrack.path)
             musicAudio.src = currentTrack.path
             musicAudio.play()
@@ -263,42 +260,50 @@ function getOffset(text) {
 }
 
 
+function parseLyricByString(text) {
+    var lines = text.split('\n'),
+        //this regex mathes the time [00.12.78]
+        pattern = /\[\d{2}:\d{2}.\d{3}\]/g,
+        result = [];
+
+    // Get offset from lyrics
+    var offset = getOffset(text);
+
+    //exclude the description parts or empty parts of the lyric
+    while (!pattern.test(lines[0])) {
+        lines = lines.slice(1);
+    };
+    //remove the last empty item
+    lines[lines.length - 1].length === 0 && lines.pop();
+    //display all content on the page
+    lines.forEach(function(v, i, a) {
+        var time = v.match(pattern),
+            value = v.replace(pattern, '');
+        time.forEach(function(v1, i1, a1) {
+            //convert the [min:sec] to secs format then store into result
+            var t = v1.slice(1, -1).split(':');
+            result.push([parseInt(t[0], 10) * 60 + parseFloat(t[1]) + parseInt(offset) / 1000, value]);
+        });
+    });
+    //sort the result by time
+    result.sort(function(a, b) {
+        return a[0] - b[0];
+    });
+    console.log(result);
+    lyricVal = result
+    appendLyric(lyricVal);
+}
+
 function parseLyric(path) {
-    console.log(path)
-    fs.readFile(path, (err, res) => {
-        var text = res.toString()
-        var lines = text.split('\n'),
-            //this regex mathes the time [00.12.78]
-            pattern = /\[\d{2}:\d{2}.\d{3}\]/g,
-            result = [];
-
-        // Get offset from lyrics
-        var offset = getOffset(text);
-
-        //exclude the description parts or empty parts of the lyric
-        while (!pattern.test(lines[0])) {
-            lines = lines.slice(1);
-        };
-        //remove the last empty item
-        lines[lines.length - 1].length === 0 && lines.pop();
-        //display all content on the page
-        lines.forEach(function(v, i, a) {
-            var time = v.match(pattern),
-                value = v.replace(pattern, '');
-            time.forEach(function(v1, i1, a1) {
-                //convert the [min:sec] to secs format then store into result
-                var t = v1.slice(1, -1).split(':');
-                result.push([parseInt(t[0], 10) * 60 + parseFloat(t[1]) + parseInt(offset) / 1000, value]);
-            });
-        });
-        //sort the result by time
-        result.sort(function(a, b) {
-            return a[0] - b[0];
-        });
-        console.log(result);
-        lyricVal = result
-        appendLyric(lyricVal);
-    })
+    if (path) {
+        fs.readFile(path, (err, res) => {
+            var text = res.toString()
+            // console.log(text)
+            parseLyricByString(text)
+        })
+    } else {
+        parseLyricByString('[00:00.000] 暂未添加歌词')
+    }
 }
 
 // var width = $('player-progress').offsetHeight
